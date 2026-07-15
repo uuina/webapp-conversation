@@ -18,28 +18,30 @@ const Header: FC<IHeaderProps> = ({
   onCreateNewChat,
 }) => {
   return (
-    <div className="shrink-0 flex items-center justify-between h-12 px-3 bg-gray-100">
-      {isMobile
-        ? (
-          <div
-            className='flex items-center justify-center h-8 w-8 cursor-pointer'
-            onClick={() => onShowSideBar?.()}
-          >
-            <Bars3Icon className="h-4 w-4 text-gray-500" />
-          </div>
-        )
-        : <div></div>}
-      <div className='flex items-center space-x-2'>
-        <AppIcon size="small" />
-        <div className=" text-sm text-gray-800 font-bold">{title}</div>
+    <header className="flex h-14 shrink-0 items-center justify-between border-b border-gray-200/80 bg-white/95 px-3 backdrop-blur-sm tablet:px-5">
+      <button
+        type="button"
+        aria-label="打开会话列表"
+        className={`flex size-9 items-center justify-center rounded-lg text-gray-600 transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 ${isMobile ? '' : 'invisible'}`}
+        onClick={() => onShowSideBar?.()}
+      >
+        <Bars3Icon className="size-5" />
+      </button>
+      <div className="flex min-w-0 items-center gap-2.5">
+        <span className="flex size-7 items-center justify-center overflow-hidden rounded-lg bg-gray-900 text-white">
+          <AppIcon size="small" />
+        </span>
+        <div className="truncate text-sm font-semibold text-gray-900">{title}</div>
       </div>
-      {isMobile
-        ? (
-          <div className='flex items-center justify-center h-8 w-8 cursor-pointer' onClick={() => onCreateNewChat?.()} >
-            <PencilSquareIcon className="h-4 w-4 text-gray-500" />
-          </div>)
-        : <div></div>}
-    </div>
+      <button
+        type="button"
+        aria-label="新建对话"
+        className={`flex size-9 items-center justify-center rounded-lg text-gray-600 transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 ${isMobile ? '' : 'invisible'}`}
+        onClick={() => onCreateNewChat?.()}
+      >
+        <PencilSquareIcon className="size-5" />
+      </button>
+    </header>
   )
 }
 

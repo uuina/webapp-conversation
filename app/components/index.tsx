@@ -306,8 +306,7 @@ const Main: FC<IMainProps> = () => {
 
     let emptyRequiredInput = false
     promptConfig.prompt_variables.forEach((item) => {
-      if (item.required && !currInputs[item.key])
-        emptyRequiredInput = true
+      if (item.required && !currInputs[item.key]) { emptyRequiredInput = true }
     })
 
     if (emptyRequiredInput) {
@@ -653,25 +652,23 @@ const Main: FC<IMainProps> = () => {
   if (!APP_ID || !APP_INFO || !promptConfig) { return <Loading type='app' /> }
 
   return (
-    <div className='bg-gray-100'>
-      <Header
-        title={APP_INFO.title}
-        isMobile={isMobile}
-        onShowSideBar={showSidebar}
-        onCreateNewChat={() => handleConversationIdChange('-1')}
-      />
-      <div className="flex rounded-t-2xl bg-white overflow-hidden">
-        {/* sidebar */}
-        {!isMobile && renderSidebar()}
-        {isMobile && isShowSidebar && (
-          <div className='fixed inset-0 z-50' style={{ backgroundColor: 'rgba(35, 56, 118, 0.2)' }} onClick={hideSidebar} >
-            <div className='inline-block' onClick={e => e.stopPropagation()}>
-              {renderSidebar()}
-            </div>
+    <main className="flex h-dvh overflow-hidden bg-white">
+      {!isMobile && renderSidebar()}
+      {isMobile && isShowSidebar && (
+        <div className="fixed inset-0 z-50 bg-black/35 backdrop-blur-[2px]" onClick={hideSidebar}>
+          <div className="inline-block shadow-2xl" onClick={e => e.stopPropagation()}>
+            {renderSidebar()}
           </div>
-        )}
-        {/* main */}
-        <div className='flex-grow flex flex-col h-[calc(100vh_-_3rem)] overflow-y-auto'>
+        </div>
+      )}
+      <section className="flex min-w-0 flex-1 flex-col bg-white">
+        <Header
+          title={conversationName || APP_INFO.title}
+          isMobile={isMobile}
+          onShowSideBar={showSidebar}
+          onCreateNewChat={() => handleConversationIdChange('-1')}
+        />
+        <div className="relative flex min-h-0 flex-1 flex-col overflow-y-auto">
           <ConfigSence
             conversationName={conversationName}
             hasSetInputs={hasSetInputs}
@@ -682,25 +679,24 @@ const Main: FC<IMainProps> = () => {
             canEditInputs={canEditInputs}
             savedInputs={currInputs as Record<string, any>}
             onInputsChange={setCurrInputs}
-          ></ConfigSence>
+          />
 
-          {
-            hasSetInputs && (
-              <div className='relative grow pc:w-[794px] max-w-full mobile:w-full pb-[180px] mx-auto mb-3.5' ref={chatListDomRef}>
-                <Chat
-                  chatList={chatList}
-                  onSend={handleSend}
-                  onFeedback={handleFeedback}
-                  isResponding={isResponding}
-                  checkCanSend={checkCanSend}
-                  visionConfig={visionConfig}
-                  fileConfig={fileConfig}
-                />
-              </div>)
-          }
+          {hasSetInputs && (
+            <div className="relative mx-auto w-full max-w-3xl grow px-4 pb-40 pt-6 tablet:px-6" ref={chatListDomRef}>
+              <Chat
+                chatList={chatList}
+                onSend={handleSend}
+                onFeedback={handleFeedback}
+                isResponding={isResponding}
+                checkCanSend={checkCanSend}
+                visionConfig={visionConfig}
+                fileConfig={fileConfig}
+              />
+            </div>
+          )}
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   )
 }
 

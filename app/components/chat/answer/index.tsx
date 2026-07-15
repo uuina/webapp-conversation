@@ -18,13 +18,13 @@ import Thought from '../thought'
 
 function OperationBtn({ innerContent, onClick, className }: { innerContent: React.ReactNode, onClick?: () => void, className?: string }) {
   return (
-    <div
-      className={`relative box-border flex items-center justify-center h-7 w-7 p-0.5 rounded-lg bg-white cursor-pointer text-gray-500 hover:text-gray-800 ${className ?? ''}`}
-      style={{ boxShadow: '0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.05)' }}
-      onClick={onClick && onClick}
+    <button
+      type="button"
+      className={`relative flex size-8 cursor-pointer items-center justify-center rounded-lg text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 ${className ?? ''}`}
+      onClick={onClick}
     >
       {innerContent}
-    </div>
+    </button>
   )
 }
 
@@ -177,54 +177,44 @@ const Answer: FC<IAnswerProps> = ({
   )
 
   return (
-    <div key={id}>
-      <div className="flex items-start">
-        <div className={`${s.answerIcon} w-10 h-10 shrink-0`}>
-          {isResponding
-            && (
-              <div className={s.typeingIcon}>
-                <LoadingAnim type="avatar" />
+    <article key={id} className="flex items-start gap-4">
+      <div className={`${s.answerIcon} size-8 shrink-0 rounded-full bg-gray-900`}>
+        {isResponding && (
+          <div className={s.typeingIcon}>
+            <LoadingAnim type="avatar" />
+          </div>
+        )}
+      </div>
+      <div className={`${s.answerWrap} min-w-0 flex-1`}>
+        <div className="text-sm leading-7 text-gray-900">
+          <div className={workflowProcess ? 'min-w-0' : ''}>
+            {workflowProcess && (
+              <div className="mb-4 overflow-hidden rounded-xl border border-gray-200 bg-gray-50 p-3">
+                <WorkflowProcess data={workflowProcess} hideInfo />
               </div>
             )}
-        </div>
-        <div className={`${s.answerWrap} max-w-[calc(100%-3rem)]`}>
-          <div className={`${s.answer} relative text-sm text-gray-900`}>
-            <div className={`ml-2 py-3 px-4 bg-gray-100 rounded-tr-2xl rounded-b-2xl ${workflowProcess && 'min-w-[480px]'}`}>
-              {workflowProcess && (
-                <WorkflowProcess data={workflowProcess} hideInfo />
-              )}
-              {(isResponding && (isAgentMode ? (!content && (agent_thoughts || []).filter(item => !!item.thought || !!item.tool).length === 0) : !content))
-                ? (
-                  <div className="flex items-center justify-center w-6 h-5">
-                    <LoadingAnim type="text" />
-                  </div>
-                )
-                : (isAgentMode
-                  ? agentModeAnswer
-                  : (
-                    <StreamdownMarkdown content={content} />
-                  ))}
-              {suggestedQuestions.length > 0 && (
-                <div className="mt-3">
-                  <div className="flex gap-1 mt-1 flex-wrap">
-                    {suggestedQuestions.map((suggestion, index) => (
-                      <div key={index} className="flex items-center gap-1">
-                        <Button className="text-sm" type="link" onClick={() => suggestionClick(suggestion)}>{suggestion}</Button>
-                      </div>
-                    ))}
-                  </div>
+            {(isResponding && (isAgentMode ? (!content && (agent_thoughts || []).filter(item => !!item.thought || !!item.tool).length === 0) : !content))
+              ? (
+                <div className="flex h-7 w-6 items-center justify-center">
+                  <LoadingAnim type="text" />
                 </div>
-              )}
-            </div>
-            <div className="absolute top-[-14px] right-[-14px] flex flex-row justify-end gap-1">
-              {!feedbackDisabled && !item.feedbackDisabled && renderItemOperation()}
-              {/* User feedback must be displayed */}
-              {!feedbackDisabled && renderFeedbackRating(feedback?.rating)}
-            </div>
+              )
+              : (isAgentMode ? agentModeAnswer : <StreamdownMarkdown content={content} />)}
+            {suggestedQuestions.length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-2">
+                {suggestedQuestions.map((suggestion, index) => (
+                  <Button key={index} className="!h-auto !rounded-xl !px-3 !py-2 !text-sm" type="link" onClick={() => suggestionClick(suggestion)}>{suggestion}</Button>
+                ))}
+              </div>
+            )}
+          </div>
+          <div className="mt-2 flex min-h-8 flex-row items-center gap-1">
+            {!feedbackDisabled && !item.feedbackDisabled && renderItemOperation()}
+            {!feedbackDisabled && renderFeedbackRating(feedback?.rating)}
           </div>
         </div>
       </div>
-    </div>
+    </article>
   )
 }
 export default React.memo(Answer)

@@ -9,13 +9,21 @@ import {
 import s from './style.module.css'
 import type { AppInfo } from '@/types/app'
 import Button from '@/app/components/base/button'
+import AppIcon from '@/app/components/base/app-icon'
 
 export const AppInfoComp: FC<{ siteInfo: AppInfo }> = ({ siteInfo }) => {
   const { t } = useTranslation()
   return (
-    <div>
-      <div className='flex items-center py-2 text-xl font-medium text-gray-700 rounded-md'>👏 {t('app.common.welcome')} {siteInfo.title}</div>
-      <p className='text-sm text-gray-500'>{siteInfo.description}</p>
+    <div className="mb-7 flex flex-col items-center text-center">
+      <div className="mb-5 flex size-12 items-center justify-center overflow-hidden rounded-2xl bg-gray-900 text-white shadow-sm">
+        <AppIcon size="large" />
+      </div>
+      <h1 className="text-balance text-2xl font-semibold tracking-tight text-gray-950 tablet:text-3xl">
+        {t('app.common.welcome')} {siteInfo.title}
+      </h1>
+      {siteInfo.description && (
+        <p className="mt-3 max-w-xl text-pretty text-sm leading-6 text-gray-500 tablet:text-base">{siteInfo.description}</p>
+      )}
     </div>
   )
 }
@@ -45,7 +53,7 @@ export const ChatBtn: FC<{ onClick: () => void, className?: string }> = ({
   return (
     <Button
       type='primary'
-      className={cn(className, `space-x-2 flex items-center ${s.customBtn}`)}
+      className={cn(className, `flex items-center gap-2 !rounded-xl !bg-gray-900 hover:!bg-gray-800 ${s.customBtn}`)}
       onClick={onClick}
     >
       <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">

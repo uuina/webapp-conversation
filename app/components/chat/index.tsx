@@ -132,7 +132,7 @@ const Chat: FC<IChatProps> = ({
   }
 
   const handleKeyDown = (e: any) => {
-    isUseInputMethod.current = e.nativeEvent.isComposing
+    isUseInputMethod.current = e.nativeEvent.isComposing || e.keyCode === 229
     if (e.code === 'Enter' && !e.shiftKey) {
       const result = query.replace(/\n$/, '')
       setQuery(result)
@@ -148,9 +148,9 @@ const Chat: FC<IChatProps> = ({
   }
 
   return (
-    <div className={cn(!feedbackDisabled && 'px-3.5', 'h-full')}>
+    <div className={cn(!feedbackDisabled && '', 'h-full')}>
       {/* Chat List */}
-      <div className="h-full space-y-[30px]">
+      <div className="flex h-full flex-col gap-8">
         {chatList.map((item) => {
           if (item.isAnswer) {
             const isLast = item.id === chatList[chatList.length - 1].id
@@ -176,8 +176,8 @@ const Chat: FC<IChatProps> = ({
       </div>
       {
         !isHideSendInput && (
-          <div className='fixed z-10 bottom-0 left-1/2 transform -translate-x-1/2 pc:ml-[122px] tablet:ml-[96px] mobile:ml-0 pc:w-[794px] tablet:w-[794px] max-w-full mobile:w-full px-3.5'>
-            <div className='p-[5.5px] max-h-[150px] bg-white border-[1.5px] border-gray-200 rounded-xl overflow-y-auto'>
+          <div className="fixed bottom-0 left-[280px] right-0 z-10 bg-white/90 px-4 pb-5 pt-3 backdrop-blur-md mobile:left-0 tablet:px-6">
+            <div className="relative mx-auto max-h-[180px] w-full max-w-3xl overflow-y-auto rounded-[26px] border border-gray-300 bg-white p-2 shadow-[0_8px_28px_rgba(0,0,0,0.10)] transition-shadow focus-within:border-gray-400 focus-within:shadow-[0_10px_34px_rgba(0,0,0,0.14)]">
               {
                 visionConfig?.enabled && (
                   <>
@@ -214,7 +214,7 @@ const Chat: FC<IChatProps> = ({
               }
               <Textarea
                 className={`
-                  block w-full px-2 pr-[118px] py-[7px] leading-5 max-h-none text-base text-gray-700 outline-none appearance-none resize-none
+                  block w-full appearance-none resize-none bg-transparent px-3 py-2.5 pr-24 text-base leading-6 text-gray-900 outline-none placeholder:text-gray-400
                   ${visionConfig?.enabled && 'pl-12'}
                 `}
                 value={query}
@@ -223,8 +223,8 @@ const Chat: FC<IChatProps> = ({
                 onKeyDown={handleKeyDown}
                 autoSize
               />
-              <div className="absolute bottom-2 right-6 flex items-center h-8">
-                <div className={`${s.count} mr-3 h-5 leading-5 text-sm bg-gray-50 text-gray-500 px-2 rounded`}>{query.trim().length}</div>
+              <div className="absolute bottom-2.5 right-3 flex h-8 items-center gap-2">
+                <div className={`${s.count} rounded-md bg-gray-100 px-1.5 text-xs leading-5 text-gray-500`}>{query.trim().length}</div>
                 <Tooltip
                   selector='send-tip'
                   htmlContent={

@@ -1,5 +1,10 @@
+const { PHASE_DEVELOPMENT_SERVER } = require('next/constants')
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const createNextConfig = phase => ({
+  // Keep development HMR artifacts separate from production build artifacts.
+  // Running `next build` while Preview is active must not invalidate dev chunks.
+  distDir: phase === PHASE_DEVELOPMENT_SERVER ? '.next-dev' : '.next',
   productionBrowserSourceMaps: false, // enable browser source map generation during the production build
   // Configure pageExtensions to include md and mdx
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
@@ -17,6 +22,6 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   output: 'standalone',
-}
+})
 
-module.exports = nextConfig
+module.exports = createNextConfig
